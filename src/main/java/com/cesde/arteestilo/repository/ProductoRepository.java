@@ -1,6 +1,6 @@
-package com.cesde.arte_estilo.repository;
+package com.cesde.arteestilo.repository;
 
-import com.cesde.arte_estilo.model.Producto;
+import com.cesde.arteestilo.model.Producto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

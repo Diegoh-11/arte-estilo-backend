@@ -1,4 +1,4 @@
-package com.cesde.arte_estilo;
+package com.cesde.arteestilo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

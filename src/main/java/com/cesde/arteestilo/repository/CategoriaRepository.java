@@ -1,6 +1,6 @@
-package com.cesde.arte_estilo.repository;
+package com.cesde.arteestilo.repository;
 
-import com.cesde.arte_estilo.model.Categoria;
+import com.cesde.arteestilo.model.Categoria;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

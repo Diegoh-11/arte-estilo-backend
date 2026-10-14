@@ -1,7 +1,7 @@
-package com.cesde.arte_estilo.repository;
+package com.cesde.arteestilo.repository;
 
-import com.cesde.arte_estilo.model.EstadoPedido;
-import com.cesde.arte_estilo.model.Pedido;
+import com.cesde.arteestilo.model.EstadoPedido;
+import com.cesde.arteestilo.model.Pedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
