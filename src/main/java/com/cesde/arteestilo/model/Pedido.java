@@ -1,4 +1,4 @@
-package com.cesde.arte_estilo.model;
+package com.cesde.arteestilo.model;
 
 import jakarta.persistence.*;
 import lombok.*;
