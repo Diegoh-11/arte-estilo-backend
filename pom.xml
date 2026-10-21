@@ -68,6 +68,14 @@
 	</dependencies>
 
 	<build>
+		<!-- Agrega este bloque de recursos para desactivar el filtrado -->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
+
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

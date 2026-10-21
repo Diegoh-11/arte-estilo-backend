@@ -1,7 +1,8 @@
-package com.cesde.arte_estilo.controller;
+package com.cesde.arteestilo.controller;
 
-import com.cesde.arte_estilo.model.Usuario;
-import com.cesde.arte_estilo.service.UsuarioService;
+import com.cesde.arteestilo.model.Usuario;
+import com.cesde.arteestilo.service.UsuarioService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,5 +23,11 @@ public class UsuarioController {
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> obtener(@PathVariable Long id) {
         return ResponseEntity.ok(usuarioService.obtenerPorId(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<Usuario> crear(@RequestBody Usuario usuario) {
+        Usuario nuevoUsuario = usuarioService.guardar(usuario);
+        return new ResponseEntity<>(nuevoUsuario, HttpStatus.CREATED);
     }
 }

@@ -1,7 +1,7 @@
-package com.cesde.arte_estilo.controller;
+package com.cesde.arteestilo.controller;
 
-import com.cesde.arte_estilo.model.Producto;
-import com.cesde.arte_estilo.service.ProductoService;
+import com.cesde.arteestilo.model.Producto;
+import com.cesde.arteestilo.service.ProductoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

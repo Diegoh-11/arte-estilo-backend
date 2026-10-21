@@ -1,4 +1,4 @@
-package com.cesde.arte_estilo.Response;
+package com.cesde.arteestilo.exception;
 
 public class RecursoNoEncontradoException extends RuntimeException {
     public RecursoNoEncontradoException(String mensaje) {
