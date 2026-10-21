@@ -1,4 +1,5 @@
-package com.cesde.arte_estilo.Response;
+package com.cesde.arteestilo.exception;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ErrorResponse {
     private LocalDateTime fecha;
-    private String message;
+    private String mensaje;
     private int codigoHttp;
 }

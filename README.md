@@ -278,7 +278,7 @@ Entrega etiquetada como **`v1.0.0`** en `main`.
 
 **Proyecto académico — CESDE**
 Repositorio: [arte-estilo-backend](https://github.com/tu-usuario/arte-estilo-backend)
-Año: 2025
+Año: 2026
 
 ---
 
