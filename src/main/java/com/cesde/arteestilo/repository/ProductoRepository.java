@@ -14,10 +14,14 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     /** Query Method derivado: busca productos activos por nombre de categoría. */
     List<Producto> findByCategoriaNombreAndEstadoActivoTrue(String nombreCategoria);
 
-    /**
-     * Consulta explícita JPQL: productos activos con stock por encima de un mínimo.
-     * Representa la lógica de "productos en oferta con stock superior".
-     */
+    /** JPQL explícita: productos activos con stock por encima de un mínimo. */
     @Query("SELECT p FROM Producto p WHERE p.stock > :stockMinimo AND p.estadoActivo = true")
     List<Producto> findProductosEnOfertaConStockSup(@Param("stockMinimo") Integer stockMinimo);
+
+    List<Producto> findByEstadoActivoTrue();
+
+    /** Endpoint personalizado: productos activos con poco inventario, de menor a mayor stock. */
+    List<Producto> findByStockLessThanEqualAndEstadoActivoTrueOrderByStockAsc(Integer limite);
+
+    boolean existsByCategoriaIdAndEstadoActivoTrue(Long categoriaId);
 }

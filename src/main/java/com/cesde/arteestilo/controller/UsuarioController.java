@@ -1,13 +1,21 @@
 package com.cesde.arteestilo.controller;
 
-import com.cesde.arteestilo.model.Usuario;
+import com.cesde.arteestilo.dto.UsuarioPatch;
+import com.cesde.arteestilo.dto.UsuarioRequest;
+import com.cesde.arteestilo.dto.UsuarioResponse;
 import com.cesde.arteestilo.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/usuarios")
+@Tag(name = "Usuarios", description = "Gestión de usuarios y sus perfiles")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -16,18 +24,42 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    /**
-     * GET /api/v1/usuarios/{id}
-     * Usa @PathVariable. Responde 200 o 404 (vía GlobalExceptionHandler).
-     */
+    @GetMapping
+    @Operation(summary = "Listar usuarios activos")
+    public ResponseEntity<List<UsuarioResponse>> listar() {
+        return ResponseEntity.ok(usuarioService.listar());
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> obtener(@PathVariable Long id) {
-        return ResponseEntity.ok(usuarioService.obtenerPorId(id));
+    @Operation(summary = "Obtener un usuario por id")
+    public ResponseEntity<UsuarioResponse> obtener(@PathVariable Long id) {
+        return ResponseEntity.ok(usuarioService.obtener(id));
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> crear(@RequestBody Usuario usuario) {
-        Usuario nuevoUsuario = usuarioService.guardar(usuario);
-        return new ResponseEntity<>(nuevoUsuario, HttpStatus.CREATED);
+    @Operation(summary = "Crear un usuario (con perfil opcional)")
+    public ResponseEntity<UsuarioResponse> crear(@Valid @RequestBody UsuarioRequest dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.crear(dto));
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Reemplazar un usuario completo")
+    public ResponseEntity<UsuarioResponse> reemplazar(@PathVariable Long id,
+                                                      @Valid @RequestBody UsuarioRequest dto) {
+        return ResponseEntity.ok(usuarioService.reemplazar(id, dto));
+    }
+
+    @PatchMapping("/{id}")
+    @Operation(summary = "Actualizar parcialmente un usuario")
+    public ResponseEntity<UsuarioResponse> actualizarParcial(@PathVariable Long id,
+                                                             @Valid @RequestBody UsuarioPatch dto) {
+        return ResponseEntity.ok(usuarioService.actualizarParcial(id, dto));
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar (baja lógica) un usuario")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        usuarioService.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 }

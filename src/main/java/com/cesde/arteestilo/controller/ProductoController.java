@@ -1,7 +1,12 @@
 package com.cesde.arteestilo.controller;
 
-import com.cesde.arteestilo.model.Producto;
+import com.cesde.arteestilo.dto.ProductoPatch;
+import com.cesde.arteestilo.dto.ProductoRequest;
+import com.cesde.arteestilo.dto.ProductoResponse;
 import com.cesde.arteestilo.service.ProductoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/productos")
+@Tag(name = "Productos", description = "Catálogo de productos")
 public class ProductoController {
 
     private final ProductoService productoService;
@@ -18,33 +24,53 @@ public class ProductoController {
         this.productoService = productoService;
     }
 
-    /**
-     * GET /api/v1/productos?categoria=Sillas&minStock=5
-     * Uso de @RequestParam para filtrar por categoría y/o stock mínimo.
-     */
     @GetMapping
-    public ResponseEntity<List<Producto>> listar(
+    @Operation(summary = "Listar productos activos",
+            description = "Filtros opcionales: categoria (nombre) o minStock (stock mayor al valor)")
+    public ResponseEntity<List<ProductoResponse>> listar(
             @RequestParam(required = false) String categoria,
             @RequestParam(required = false) Integer minStock) {
+        return ResponseEntity.ok(productoService.listar(categoria, minStock));
+    }
 
-        if (categoria != null && !categoria.isBlank()) {
-            return ResponseEntity.ok(productoService.listarPorCategoria(categoria));
-        }
-        if (minStock != null) {
-            return ResponseEntity.ok(productoService.listarConStockSuperior(minStock));
-        }
-        // Fallback: listar todos con minStock 0
-        return ResponseEntity.ok(productoService.listarConStockSuperior(0));
+    @GetMapping("/bajo-stock")
+    @Operation(summary = "[Personalizado] Productos con poco inventario",
+            description = "Devuelve los productos activos con stock menor o igual a 'limite', del más escaso al menos escaso")
+    public ResponseEntity<List<ProductoResponse>> bajoStock(
+            @RequestParam(defaultValue = "5") Integer limite) {
+        return ResponseEntity.ok(productoService.listarBajoStock(limite));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Producto> obtener(@PathVariable Long id) {
-        return ResponseEntity.ok(productoService.obtenerPorId(id));
+    @Operation(summary = "Obtener un producto por id")
+    public ResponseEntity<ProductoResponse> obtener(@PathVariable Long id) {
+        return ResponseEntity.ok(productoService.obtener(id));
     }
 
     @PostMapping
-    public ResponseEntity<Producto> crear(@RequestBody Producto producto) {
-        Producto creado = productoService.guardar(producto);
-        return new ResponseEntity<>(creado, HttpStatus.CREATED);
+    @Operation(summary = "Crear un producto")
+    public ResponseEntity<ProductoResponse> crear(@Valid @RequestBody ProductoRequest dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(productoService.crear(dto));
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Reemplazar un producto completo")
+    public ResponseEntity<ProductoResponse> reemplazar(@PathVariable Long id,
+                                                       @Valid @RequestBody ProductoRequest dto) {
+        return ResponseEntity.ok(productoService.reemplazar(id, dto));
+    }
+
+    @PatchMapping("/{id}")
+    @Operation(summary = "Actualizar parcialmente un producto")
+    public ResponseEntity<ProductoResponse> actualizarParcial(@PathVariable Long id,
+                                                              @Valid @RequestBody ProductoPatch dto) {
+        return ResponseEntity.ok(productoService.actualizarParcial(id, dto));
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar (baja lógica) un producto")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        productoService.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 }
