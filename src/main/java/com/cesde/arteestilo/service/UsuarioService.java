@@ -77,6 +77,14 @@ public class UsuarioService {
         usuarioRepository.save(u);
     }
 
+    @Transactional(readOnly = true)
+    public UsuarioResponse buscarPorCorreo(String correo) {
+        Usuario usuario = usuarioRepository.findByCorreo(correo)
+                .filter(u -> Boolean.TRUE.equals(u.getEstadoActivo()))
+                .orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado con el correo: " + correo));
+        return toResponse(usuario);
+    }
+
     private Usuario buscar(Long id) {
         return usuarioRepository.findById(id)
                 .filter(u -> Boolean.TRUE.equals(u.getEstadoActivo()))
