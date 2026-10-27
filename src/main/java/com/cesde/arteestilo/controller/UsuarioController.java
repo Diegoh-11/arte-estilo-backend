@@ -62,4 +62,11 @@ public class UsuarioController {
         usuarioService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
+
+    // ENDPOINT PERSONALIZADO: Búsqueda por correo exacto
+    @GetMapping("/buscar")
+    @Operation(summary = "[Personalizado] Buscar usuario por correo")
+    public ResponseEntity<UsuarioResponse> buscarPorCorreo(@RequestParam String correo) {
+        return ResponseEntity.ok(usuarioService.buscarPorCorreo(correo));
+    }
 }
